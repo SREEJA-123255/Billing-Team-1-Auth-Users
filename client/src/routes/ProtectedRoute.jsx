@@ -14,6 +14,7 @@ const ProtectedRoute = ({ allowedRoles = null }) => {
       </div>
     );
   }
+  
 
   if (!isAuthenticated || !currentUser) {
     return <Navigate to="/login" state={{ from: location }} replace />;
