@@ -1,0 +1,338 @@
+/* Professional User Management Styling */
+.users-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Page Action Bar */
+.users-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.users-heading h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.users-heading p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.125rem;
+}
+
+/* Filter Controls Bar */
+.users-filter-card {
+  background: #ffffff;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 240px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box-icon {
+  position: absolute;
+  left: 0.875rem;
+  color: #94a3b8;
+  font-size: 1.125rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem 0.625rem 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.search-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  padding: 0.625rem 2rem 0.625rem 0.875rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  background-color: #ffffff;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Table View (Desktop >= 768px) */
+.table-container {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.desktop-table-view {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.desktop-table-view th {
+  background-color: #f8fafc;
+  padding: 0.875rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.desktop-table-view td {
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  color: #334155;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.desktop-table-view tr:last-child td {
+  border-bottom: none;
+}
+
+.desktop-table-view tr:hover td {
+  background-color: #f8fafc;
+}
+
+.user-name-cell {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Mobile Cards View (< 768px) */
+.mobile-card-list {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.user-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.user-card-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Empty & Loading States */
+.state-message-card {
+  background: #ffffff;
+  padding: 3rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.state-message-icon {
+  font-size: 2.5rem;
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
+}
+
+.state-message-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.state-message-desc {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 1.25rem;
+}
+
+/* Responsive Switching */
+@media (max-width: 768px) {
+  .table-container {
+    display: none;
+  }
+  .mobile-card-list {
+    display: flex;
+  }
+  .users-action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .users-action-bar .btn {
+    width: 100%;
+  }
+  .users-filter-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-box {
+    width: 100%;
+  }
+  .filter-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .filter-select {
+    width: 100%;
+  }
+  .filter-group .btn {
+    height: 100%;
+    padding: 0.5rem 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 540px) {
+  .filter-group {
+    grid-template-columns: 1fr 1fr;
+  }
+  .filter-group .btn {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 0.625rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .users-heading h2 {
+    font-size: 1.25rem;
+  }
+  .users-filter-card {
+    padding: 0.875rem 1rem;
+  }
+  .user-card {
+    padding: 1rem;
+  }
+  .user-card-actions {
+    gap: 0.5rem;
+  }
+  .pagination-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+  }
+  .pagination-controls {
+    width: 100%;
+    justify-content: center;
+  }
+  .pagination-controls .btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 380px) {
+  .filter-group {
+    grid-template-columns: 1fr;
+  }
+  .filter-group .btn {
+    grid-column: auto;
+  }
+  .user-card-actions {
+    flex-direction: column;
+  }
+  .user-card-actions .btn {
+    width: 100%;
+  }
+}
