@@ -1,70 +1,126 @@
-# Multi-Team Billing Software System — Team 1 Deliverable
+# Billing System Auth & User Management
 
-## Modules Implemented (Team 1 Scope Only):
-1. **Authentication** (Login, Session Verification, JWT Token Generation & Refresh, Secure Logout)
-2. **User Management & Registration** (User CRUD, Search by Name/Email/Phone, Role Filter, Status Filter, Pagination)
-3. **User Roles & Authorization** (`ADMIN`, `MANAGER`, `CASHIER`, `STAFF` with granular route-level and UI-level protection)
-4. **Soft Activation / Deactivation** (Status toggle with prevention against self-deactivation)
-5. **Business Settings & Profile** (Single business entity, Contact information, GST Number, Logo upload & live preview)
-6. **Centralized Error Handling & Validation** (Mongoose schema validation, input regex validation, duplicate email prevention with 409 status code)
-7. **Mobile-Responsive UI** (Tailored for 320px, 375px, 390px, 414px, 768px, 1024px, 1280px+)
+This module provides the authentication, user management, and business settings features for the billing application. It handles login, Google sign-in, admin controls, OTP-based password recovery, and business profile updates.
 
----
+## 1. Highlights
+- Authentication with JWT-based login and protected routes.
+- Google Sign-In for approved users and the configured admin account.
+- OTP password recovery flow for non-admin users.
+- Role-based access control for ADMIN, MANAGER, CASHIER, and STAFF.
+- User management with create, search, filter, pagination, update, and status control.
+- Business settings with profile details and logo upload support.
+- Input validation and centralized error handling across the API.
 
-## 1. Quick Start
+## 2. Tech stack
 
-### Backend (`server/`)
+| Layer | Stack |
+|---|---|
+| Frontend | React, Vite, React Router, Axios, @react-oauth/google, React Icons |
+| Backend | Node.js, Express, MongoDB, Mongoose, JWT, bcryptjs, multer, nodemailer |
+| Auth | JWT, Google OAuth, password hashing |
+
+## 3. Getting started
+
+### Prerequisites
+- Node.js and npm installed on your machine.
+
+### Backend
 ```bash
 cd server
 npm install
-npm run seed     # Seeds default users (Admin, Manager, Cashier, Staff, Inactive) and business settings
-npm start        # Runs on http://localhost:5000
+cp .env.example .env    # then fill in your own values
+npm run seed
+npm start
 ```
+Backend runs on http://localhost:5000.
 
-### Frontend (`client/`)
+### Frontend
 ```bash
 cd client
 npm install
-npm run dev      # Runs Vite dev server on http://localhost:5173
+npm run dev
+```
+Frontend runs on http://localhost:5173.
+
+## 4. Environment variables
+
+### Server
+| Variable | Purpose |
+|---|---|
+| PORT | Backend port |
+| MONGODB_URI | MongoDB connection string |
+| JWT_SECRET | JWT signing key |
+| JWT_EXPIRES_IN | JWT expiry duration |
+| CLIENT_URL | Frontend URL allowed by CORS |
+| ADMIN_NAME | Default admin display name |
+| ADMIN_EMAIL | Default admin email |
+| ADMIN_PASSWORD | Default admin password |
+| ADMIN_PHONE | Default admin phone |
+| GOOGLE_CLIENT_ID | Google OAuth client ID |
+| EMAIL_SERVICE | Email provider used for OTP sending |
+| EMAIL_USER | Email account username |
+| EMAIL_PASS | Email account password/app password |
+| EMAIL_FROM | Sender name and email for OTP emails |
+| SMTP_HOST | Custom SMTP host |
+| SMTP_PORT | Custom SMTP port |
+| SMTP_SECURE | Custom SMTP secure flag |
+| SMTP_USER | Custom SMTP username |
+| SMTP_PASS | Custom SMTP password |
+
+### Client
+| Variable | Purpose |
+|---|---|
+| VITE_API_URL | Base API path used by the frontend |
+| VITE_GOOGLE_CLIENT_ID | Google client ID used by the frontend |
+
+## 5. Demo accounts
+
+| Role | Email | Password |
+|---|---|---|
+| ADMIN | admin@example.com | Admin@123 |
+| MANAGER | manager@example.com | Manager@123 |
+| CASHIER | cashier@example.com | Cashier@123 |
+| STAFF | staff@example.com | Staff@123 |
+| INACTIVE | inactive@example.com | Inactive@123 |
+
+## 6. API overview
+
+| Endpoint | Access |
+|---|---|
+| POST /api/auth/login | Public |
+| POST /api/auth/google | Public |
+| POST /api/auth/forgot-password | Public |
+| POST /api/auth/verify-otp | Public |
+| POST /api/auth/reset-password | Public |
+| GET /api/auth/me | Any logged-in user |
+| POST /api/users | Admin only |
+| GET /api/users | Admin only |
+| GET /api/users/:id | Admin only |
+| PUT /api/users/:id | Admin only |
+| PATCH /api/users/:id/status | Admin only |
+| DELETE /api/users/:id | Admin only |
+| GET /api/business | Any logged-in user |
+| PUT /api/business | Admin only |
+
+## 7. Project structure
+
+```text
+client/
+  public/
+  src/
+server/
+  config/
+  controllers/
+  middleware/
+  models/
+  routes/
+  seed/
+  uploads/
 ```
 
----
+## 8. Team
 
-## 2. Seeded Test Credentials
-
-| Role | Email | Password | Allowed Access |
-|---|---|---|---|
-| **ADMIN** | `admin@example.com` | `Admin@123` | Full System Access (Users, Settings, & all team modules) |
-| **MANAGER** | `manager@example.com` | `Manager@123` | Products, Customers, Sales, Reports |
-| **CASHIER** | `cashier@example.com` | `Cashier@123` | Customers, Sales, Billing, Payments |
-| **STAFF** | `staff@example.com` | `Staff@123` | Products, Inventory |
-| **INACTIVE** | `inactive@example.com` | `Inactive@123` | **BLOCKED** (Login returns 403 Deactivated) |
-
----
-
-## 3. Team 1 API Endpoints (Postman Ready)
-
-### Authentication
-* `POST /api/auth/login`: Authenticate with email & password, returns JWT token + user profile.
-* `GET /api/auth/me`: Get current logged-in user profile using Bearer token.
-
-### User Management (Admin Only)
-* `POST /api/users`: Create user with name, email, phone, password, role, status.
-* `GET /api/users`: Get paginated users with `?search=...`, `?role=...`, `?status=...`, `?page=...`, `?limit=...`.
-* `GET /api/users/:id`: Get single user details by ID.
-* `PUT /api/users/:id`: Update user info (name, email, phone, role, status, optional password).
-* `PATCH /api/users/:id/status`: Soft activate/deactivate user (`{ "status": "INACTIVE" }`).
-
-### Business Settings
-* `GET /api/business`: Fetch business profile (Used by Team 1 and Team 4 for invoice generation).
-* `PUT /api/business`: Update business name, email, phone, GSTIN, address, and logo file (Admin only).
-
-A ready-to-import Postman Collection is located in `postman/Team1_Billing_System.postman_collection.json`.
-
----
-
-## 4. Integration Guide for Other Teams
-* **Team 2 (Products & Inventory)**: Consume `authenticate` and `authorizeRoles("ADMIN", "MANAGER", "STAFF")` from `server/middleware/authMiddleware.js`.
-* **Team 3 (Customers & Suppliers)**: Consume `authenticate` and `authorizeRoles("ADMIN", "MANAGER", "CASHIER")`.
-* **Team 4 (Billing, Invoices & Payments)**: Consume `GET /api/business` to print Business Name, Address, GSTIN, Phone, and Logo on invoices.
-* **Team 5 (Dashboard & Reports)**: Consume `authenticate` and `authorizeRoles("ADMIN", "MANAGER")`.
+- Sreeja Kilari — Team Lead, Backend/API
+- Kranthi Kumar Mandadi — Database and Backend
+- Saiteja — Frontend UI
+- Shaik Sharief — Integration, Testing and Documentation
