@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -8,7 +9,10 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const businessRoutes = require("./routes/businessRoutes");
-const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const {
+  notFound,
+  errorHandler
+} = require("./middleware/errorMiddleware");
 const User = require("./models/User");
 const Business = require("./models/Business");
 
@@ -19,6 +23,7 @@ connectDB();
 
 // Ensure uploads/logos directory exists
 const uploadDir = path.join(__dirname, "uploads/logos");
+
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -37,19 +42,20 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static uploaded files (logos)
+// Serve uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // System Health Check
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "Billing System API (Team 1 - Auth, Users & Business) is operational",
+    message:
+      "Billing System API (Team 1 - Auth, Users & Business) is operational",
     timestamp: new Date().toISOString()
   });
 });
 
-// Team 1 Modules API Routes
+// Team 1 API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/business", businessRoutes);
@@ -59,17 +65,31 @@ app.get("/", (req, res) => {
   res.send("Billing Software API Server - Team 1 Active");
 });
 
-// Auto-seed initial admin and business profile if database is fresh
+// Initialize default admin and business profile
 const initDefaultData = async () => {
   try {
-    const adminEmail = (process.env.ADMIN_EMAIL || "admin@example.com").toLowerCase().trim();
-    const adminPassword = process.env.ADMIN_PASSWORD || "Admin@123";
-    const adminName = process.env.ADMIN_NAME || "System Administrator";
-    const adminPhone = process.env.ADMIN_PHONE || "+91 9876543210";
+    const adminEmail = (
+      process.env.ADMIN_EMAIL || "admin@example.com"
+    )
+      .toLowerCase()
+      .trim();
 
-    const existingAdmin = await User.findOne({ email: adminEmail });
+    const adminPassword =
+      process.env.ADMIN_PASSWORD || "Admin@123";
+
+    const adminName =
+      process.env.ADMIN_NAME || "System Administrator";
+
+    const adminPhone =
+      process.env.ADMIN_PHONE || "+91 9876543210";
+
+    const existingAdmin = await User.findOne({
+      email: adminEmail
+    });
+
     if (!existingAdmin) {
       console.log(`Creating default admin (${adminEmail})...`);
+
       await User.create({
         name: adminName,
         email: adminEmail,
@@ -78,25 +98,54 @@ const initDefaultData = async () => {
         role: "ADMIN",
         status: "ACTIVE"
       });
+
       console.log(`Default Admin initialized: ${adminEmail}`);
     }
 
     // Ensure business profile exists
     await Business.getOrCreateProfile();
   } catch (err) {
-    console.error("Initialization check error:", err.message);
+    console.error(
+      "Initialization check error:",
+      err.message
+    );
   }
 };
+
 initDefaultData();
 
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+// Server configuration
+const PORT = Number(process.env.PORT) || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Billing System Backend running on port ${PORT}`);
+const server = app.listen(PORT, () => {
+  console.log(
+    `Billing System Backend running on port ${PORT}`
+  );
+});
+
+// Handle server startup errors
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.error(
+      `ERROR: Port ${PORT} is already in use.`
+    );
+    console.error(
+      "The backend may already be running in another terminal."
+    );
+    console.error(
+      "Check the existing process or configure a different PORT in .env."
+    );
+
+    process.exitCode = 1;
+    return;
+  }
+
+  console.error("Backend server error:", err);
+  process.exitCode = 1;
 });
 
 module.exports = app;
